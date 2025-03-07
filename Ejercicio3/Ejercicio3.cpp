@@ -14,3 +14,33 @@
 
 // Presentar ejemplos que verifiquen el funcionamiento requerido en las funciones i-vi y,
 // muy importante para el ejercicio, sólo utilizar smart pointers. 
+#include <iostream>
+using namespace std;
+
+
+struct node{
+    int data;
+    node* next;
+};
+node *head, *tail;
+
+node* create_node(int data, node* next = NULL){
+    node* new_node = new node{data, next};
+}
+
+void push_front(int data){
+    node* next = head;
+    node* new_node = new node{data, head};
+    *head = *new_node;
+}
+
+void push_back(int data){
+    node* previous = tail;
+    node* new_node = new node{data, NULL};
+    *tail = *new_node;
+    previous -> next = tail;
+}
+
+void insert(int pos, int data){
+    
+}
