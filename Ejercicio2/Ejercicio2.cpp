@@ -19,13 +19,36 @@
 #include <string>
 using namespace std;
 
-void logMessage(const string& mensaje, const string& NivelSeveridad){
-    ofstream logfile("LogfileA.txt", ios::app);
+enum NivelesSeveridad{
+    DEBUG, INFO, WARNING, ERROR, CRITICAL
+};
+
+const string file_name = "log_file.txt";
+
+string NivelesToString(NivelesSeveridad nivelseveridad) {
+    switch (nivelseveridad) {
+        case DEBUG: return "DEBUG";
+        case INFO: return "INFO";
+        case WARNING: return "WARNING";
+        case ERROR: return "ERROR";
+        case CRITICAL: return "CRITICAL";
+        default: return "UNKNOWN";
+    }
+}
+
+
+void writeMessage(const string& mensaje, const string& nivelseveridad){
+    ofstream logfile(file_name, ios::app);
     if (logfile.is_open()){
-        logfile << "[" << NivelSeveridad << "] " << mensaje << endl;
+        logfile << "[" << nivelseveridad << "] " << mensaje << endl;
         logfile.close();
     }
 }
+
+void logMessage(string mensaje, NivelesSeveridad nivelseveridad){
+    return writeMessage(mensaje, NivelesToString(nivelseveridad));
+}
+
 
 // Verifique su funcionamiento con al menos una entrada de cada tipo.
 
@@ -47,34 +70,24 @@ void logMessage(const string& mensaje, const string& NivelSeveridad){
 // crear una entrada en el log y después detener la ejecución del programa y salir
 // del mismo con un código de error (return 1)
 
-void logMessageB(const string& mensaje, const string& parametro2, int linea_de_codigo = 0, const string& parametro3 = ""){
-    ofstream logfile("LogfileB.txt", ios::app);
-    if (logfile.is_open()){
-        if (linea_de_codigo != 0){
-            logfile << "[ERROR] " << mensaje << " en archivo "<< parametro2 <<" en linea " << linea_de_codigo << endl;
-        }else if (not parametro3.empty()){
-            logfile << "[SECURITY] User " << parametro3 << " " << mensaje << endl;
-        }else{
-            logfile << "[" << parametro2 << "] " << mensaje << endl;
-        }
-        logfile.close();
-    }
+void logMessage(string mensaje, string archivo, int linea_de_codigo){
+    string mensaje_completo = mensaje + " en archivo "+ archivo +" en linea " + to_string(linea_de_codigo);
+    return writeMessage(mensaje_completo, "ERROR");
+}
+
+void logMessage(string Mensaje_De_Acceso, string Nombre_de_Usuario){
+    string mensaje_completo = "Usuario " + Nombre_de_Usuario + ": " + Mensaje_De_Acceso;
+    return writeMessage(mensaje_completo, "SECURITY");
 }
 
 int main(){
-    logMessage("Debugging", "DEBUG");
-    logMessage("Información", "INFO");
-    logMessage("Aviso", "WARNING");
-    logMessage("Hubo un error", "ERROR");
-    logMessage("Fallo crítico", "CRITICAL");
+    logMessage("Debugging", DEBUG);
+    logMessage("Información", INFO);
+    logMessage("Aviso", WARNING);
+    logMessage("Hubo un error", ERROR);
+    logMessage("Fallo crítico", CRITICAL);
 
-    logMessageB("Debugging", "DEBUG");
-    logMessageB("Información", "INFO");
-    logMessageB("Aviso", "WARNING");
-    logMessageB("Hubo un error", "ERROR");
-    logMessageB("Fallo crítico", "CRITICAL");
-
-    logMessageB("Access granted","",0,"Cata");
-
-    logMessageB("Error 2", "hola.cpp", 15);
+    logMessage("Access granted","Cata");
+ 
+    logMessage("Error 2", "hola.cpp", 15);
 }
