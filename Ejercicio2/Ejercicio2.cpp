@@ -42,6 +42,8 @@ void writeMessage(const string& mensaje, const string& nivelseveridad){
     if (logfile.is_open()){
         logfile << "[" << nivelseveridad << "] " << mensaje << endl;
         logfile.close();
+    }else{
+        cout << "No se pudo abrir el archivo de log." << endl;
     }
 }
 
@@ -90,4 +92,39 @@ int main(){
     logMessage("Access granted","Cata");
  
     logMessage("Error 2", "hola.cpp", 15);
+
+    int opcion;
+    string mensaje;
+    while (true){
+        cout << "Seleccione el número de la opción necesaria:\n 1. DEBUG\n 2. INFO\n 3. WARNING\n 4. ERROR\n 5. CRITICAL\n 6. SECURITY\n 7. ERROR EN ARCHIVO\n 0. EXIT\n";
+        cin >> opcion;
+        cin.ignore();
+
+        if (opcion == 0)break;
+
+        cout << "Ingrese el mensaje: ";
+        getline(cin, mensaje);
+
+        if(opcion >= 1 && opcion < 6){
+            logMessage(mensaje, static_cast<NivelesSeveridad>(opcion-1));
+        }else if(opcion == 6){
+            string nombre;
+            cout << "Ingrese el nombre de usuario: ";
+            getline(cin, nombre);
+            logMessage(mensaje, nombre);
+        }else if(opcion == 7){
+            string archivo; int linea;
+            cout << "Ingrese el nombre del archivo: ";
+            getline(cin, archivo);
+
+            cout << "Ingrese el número de línea del error: ";
+            cin >> linea;
+            cin.ignore();
+
+            logMessage(mensaje, archivo, linea);
+        }else{
+            cout << "Eliga una opción de la lista" << endl;
+        }
+    }
+
 }

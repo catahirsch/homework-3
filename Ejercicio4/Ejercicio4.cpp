@@ -24,3 +24,45 @@
 // este tiempo con el obtenido en el ejercicio 4.2 y justifique brevemente la
 // diferencia (puede escribir su conclusión como un comentario al final del código
 // de este item)
+
+
+#include <iostream>
+#include <string>
+#include <chrono>
+using namespace std;
+
+constexpr bool compare_text(const char* text1, const char* text2, size_t index = 0){
+    return((text1[index] == '\0' && text2[index] == '\0') || 
+    text1[index] == text2[index] && compare_text(text1, text2, index +1));
+}
+
+int main(){
+    const char* text1 = "Atenas es un gato negro con ojos verdes que le encanta sentarse encima de mi computadora mientras intento programar.";
+    const char* text2 = "Atenas es un gato negro con ojos verdes que le encanta sentarse encima de mi computadora mientras intento programar.";
+    
+    auto startTime = chrono::high_resolution_clock::now();
+    bool son_iguales = compare_text(text1, text2);
+    auto endTime = chrono::high_resolution_clock::now();
+
+    auto elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
+    cout << "Los textos " << (son_iguales ? "si" : "no") << " son iguales" << endl;
+    std::cout << "A compare_texts le tomó: "<< elapsedTime.count() << " nanosegundos (sin realizar en tiempo de compilacion)" << endl;
+
+    // En tiempo de compilacion
+
+    constexpr char text1_const[] = "Atenas es un gato negro con ojos verdes que le encanta sentarse encima de mi computadora mientras intento programar.";
+    constexpr char text2_const[] = "Atenas es un gato negro con ojos verdes que le encanta sentarse encima de mi computadora mientras intento programar.";
+    
+    auto startTime2 = chrono::high_resolution_clock::now();
+    constexpr bool const_son_iguales = compare_text(text1_const, text2_const);
+    auto endTime2 = chrono::high_resolution_clock::now();
+
+    auto elapsedTime2 = chrono::duration_cast<chrono::nanoseconds>(endTime2 - startTime2);
+    cout << "Los textos " << (const_son_iguales ? "sí" : "no") << " son iguales (evaluado en compilacion)." << endl;
+    std::cout << "A compare_texts le tomó: "<< elapsedTime2.count() << " nanosegundos (en tiempo de compilacion)" << endl;
+}
+
+// CONCLUSION
+// El tiempo calculado cuando es evaluado en compilacion es significativamente mas chico ya que,
+// al ser evaluado antes de que el programa se ejecute, su tiempo de ejecucion es casi minimo.
+// Y, tecnicamente, el tiempo en tiempo de compilacion es 0, porque no sucede durante la ejecucion.
