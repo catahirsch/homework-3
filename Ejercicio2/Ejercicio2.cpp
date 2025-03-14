@@ -43,7 +43,7 @@ void writeMessage(const string& mensaje, const string& nivelseveridad){
         logfile << "[" << nivelseveridad << "] " << mensaje << endl;
         logfile.close();
     }else{
-        cout << "No se pudo abrir el archivo de log." << endl;
+        cout << "No se pudo abrir el archivo de log" << endl;
     }
 }
 

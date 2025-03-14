@@ -6,157 +6,152 @@
 // muy importante para el ejercicio, sólo utilizar smart pointers. 
 #include <iostream>
 #include <memory>
+
 using namespace std;
 
-struct node{
+struct node {
     int data;
     shared_ptr<node> next;
-
-    node(int data) : data(data), next(nullptr) {}
 };
 
-shared_ptr<node> head = nullptr;
-
 // i. create_node(): devuelve un nodo.
-shared_ptr<node> create_node(int data){
-    auto new_node = make_shared<node>(data);
+shared_ptr<node> create_node(int data) {
+    auto new_node = make_shared<node>();
+    new_node->data = data;
+    new_node->next = nullptr;
     return new_node;
 }
 
 // ii. push_front(): inserta un nodo al frente de la lista.
-void push_front(int data){
+void push_front(shared_ptr<node>& head, int data) {
     auto new_node = create_node(data);
-    new_node -> next = head;
+    new_node->next = head; // Si no hay head apunta a Null
     head = new_node;
 }
 
 // iii. push_back(): inserta un nodo al final de la lista.
-void push_back(int data){
+void push_back(shared_ptr<node>& head, int data) {
     auto new_node = create_node(data);
-    if (!head){
+    if (!head) {
         head = new_node;
         return;
     }
     auto curr = head;
-    while(curr -> next){
-        curr = curr -> next;
+    while (curr->next) {
+        curr = curr->next;
     }
-    curr -> next = new_node;
+    curr->next = new_node;
 }
 
-// iv. insert(): inserta un nodo en la posición que se le pase a la función. Si se le pasa
-// una posición mayor al largo de la lista, se debe indicar lo ocurrido y se debe de
-// agregar el nodo al final de la lista.
-void insert(int pos, int data){
-    if (pos <= 0){
-        push_front(data);
+// iv. insert(): inserta un nodo en la posición dada. Si la posición es mayor, lo agrega al final.
+void insert(shared_ptr<node>& head, int pos, int data) {
+    if (pos <= 0) {
+        push_front(head, data);
         return;
     }
+
     int i = 0;
     auto curr = head;
-    while (curr && i < pos - 1){
-        curr = curr -> next;
+    while (curr && i < pos - 1) {
+        curr = curr->next;
         i++;
     }
 
-    if (curr == NULL){
-            cout << "La posición dada es mayor al largo de la lista, agregando al final" << endl;
-            push_back(data);
-            return;
-        }
+    if (!curr) {
+        cout << "La posición dada es mayor al largo de la lista, agregando al final" << endl;
+        push_back(head, data);
+        return;
+    }
 
     auto new_node = create_node(data);
-    new_node -> next = curr -> next;
-    curr -> next = new_node;
+    new_node->next = curr->next;
+    curr->next = new_node;
 }
 
-// v. erase(): borra un nodo en la posición que se le pase a la función. Similar a la
-// función insert(), si la posición es mayor que el largo de la lista, se debe de borrar
-// el último nodo.
-void erase(int pos){
-    if(!head){
+// v. erase(): borra un nodo en la posición dada. Si la posición es mayor, borra el último nodo.
+void erase(shared_ptr<node>& head, int pos) {
+    if (!head) return;
+
+    if (pos <= 0) {
+        head = head->next;
         return;
     }
-    if (pos <= 0){
-        head = head -> next;
-        return;
-    }
-    int i = 0;
+
     auto curr = head;
-    while (curr -> next && i < pos - 1){
-        curr = curr -> next;
+    shared_ptr<node> prev = nullptr;
+    int i = 0;
+
+    while (curr->next && i < pos) {
+        prev = curr;
+        curr = curr->next;
         i++;
     }
 
-    if (!curr -> next){
-            cout << "La posición dada es mayor al largo de la lista, borrando al final" << endl;
-            curr = head;
-            while (curr -> next -> next){
-                curr = curr -> next;
-            }
-            curr -> next = nullptr;
-            return;
+    if (!curr->next) {
+        if (prev) {
+            prev->next = nullptr;
+        } else {
+            head = nullptr;
         }
-
-    curr -> next = curr -> next -> next;
-}
-
-// vi. print_list(): imprime la lista completa, separando el valor en cada nodo con “->”.
-
-void print_list(){
-    if(!head){
         return;
     }
+
+    prev->next = curr->next;
+}
+
+// vi. print_list(): imprime la lista.
+void print_list(const shared_ptr<node>& head) {
     auto curr = head;
-    while (curr){
-        cout << curr -> data;
-        if (curr -> next){
+    while (curr) {
+        cout << curr->data;
+        if (curr->next) {
             cout << " -> ";
         }
-        curr = curr -> next;
+        curr = curr->next;
     }
     cout << endl;
 }
 
 int main() {
-    cout << "Creando lista" << endl;
+    shared_ptr<node> head = nullptr;
 
-    push_front(30);      
-    push_front(20);      
-    push_front(10);      
-    print_list();
+    cout << "Creando lista" << endl;
+    push_front(head, 30);
+    push_front(head, 20);
+    push_front(head, 10);
+    print_list(head);
 
     cout << "\nAgregando al final:" << endl;
-    push_back(40);       
-    push_back(50);       
-    print_list();
+    push_back(head, 40);
+    push_back(head, 50);
+    print_list(head);
 
     cout << "\nInsertando en posición 2 (entre 20 y 30):" << endl;
-    insert(2, 25);       
-    print_list();
+    insert(head, 2, 25);
+    print_list(head);
 
     cout << "\nInsertando en posición 0 (inicio):" << endl;
-    insert(0, 5);        
-    print_list();
+    insert(head, 0, 5);
+    print_list(head);
 
     cout << "\nInsertando en posición 100 (muy grande, se agrega al final):" << endl;
-    insert(100, 60);     
-    print_list();
+    insert(head, 100, 60);
+    print_list(head);
 
     cout << "\nBorrando posición 3 (debería borrar el 25):" << endl;
-    erase(3);            
-    print_list();
+    erase(head, 3);
+    print_list(head);
 
     cout << "\nBorrando primera posición:" << endl;
-    erase(0);            
-    print_list();
+    erase(head, 0);
+    print_list(head);
 
     cout << "\nBorrando posición 100 (muy grande, borra el último):" << endl;
-    erase(100);          
-    print_list();
+    erase(head, 100);
+    print_list(head);
 
     cout << "\nLista final:" << endl;
-    print_list();
+    print_list(head);
 
     return 0;
 }

@@ -22,18 +22,26 @@ void imprimir_matriz(int matriz[100][100], int n){
     for (int k = total; k >= 1; --k) {
         i = (k - 1) / n;
         j = (k - 1) % n;
-        cout << "M[" << i << "][" << j << "] = " << matriz[i][j] << endl;
+        cout << "M" <<n<< "[" << i << "][" << j << "] = " << matriz[i][j] << endl;
     }
 }
 
 int main(){
     int n; int matriz[100][100];int valor = 1;
 
-    cout << "Ingrese un valor entero n (>1): ";
-    cin >> n;
-
-    matriz_cuadrada(matriz, n);
-    imprimir_matriz(matriz, n);
+    try{
+        cout << "Ingrese un valor entero n (>1): ";
+        cin >> n;
+        if (n>1){
+            matriz_cuadrada(matriz, n);
+            imprimir_matriz(matriz, n);
+        } else{
+            throw(n);
+        }
+    }
+    catch(int n){
+        cout << "El valor debe ser >1\n";
+    }
     
     return 0;
 }

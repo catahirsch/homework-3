@@ -58,11 +58,17 @@ int main(){
     auto endTime2 = chrono::high_resolution_clock::now();
 
     auto elapsedTime2 = chrono::duration_cast<chrono::nanoseconds>(endTime2 - startTime2);
-    cout << "Los textos " << (const_son_iguales ? "sí" : "no") << " son iguales (evaluado en compilacion)." << endl;
-    std::cout << "A compare_texts le tomó: "<< elapsedTime2.count() << " nanosegundos (en tiempo de compilacion)" << endl;
+    cout << "Los textos " << (const_son_iguales ? "sí" : "no") << " son iguales (evaluado en compilación)." << endl;
+    std::cout << "A compare_texts le tomó: "<< elapsedTime2.count() << " nanosegundos (en tiempo de compilación)" << endl;
 }
 
+// Elección string vs char*
+// Como en los siguientes puntos del ejercicio era necesario utilizar la función constexpr para calcular el tiempo de compilación
+// al ser evaluado en compilación, decidí usar char*, de esta manera no fue necesario utilizar una versión especifica de compilador.
+// Porque, dependiendo de la versión de compilador usado, la función contexpr puede recibir (o no) un string como argumento.
+
+
 // CONCLUSION
-// El tiempo calculado cuando es evaluado en compilacion es significativamente mas chico ya que,
-// al ser evaluado antes de que el programa se ejecute, su tiempo de ejecucion es casi minimo.
-// Y, tecnicamente, el tiempo en tiempo de compilacion es 0, porque no sucede durante la ejecucion.
+// El tiempo calculado cuando es evaluado en compilación es significativamente más chico ya que,
+// al ser evaluado antes de que el programa se ejecute, su tiempo de ejecución es casi mínimo (casi nulo).
+// Y, técnicamente, el tiempo cuando evaluado en compilación debería ser 0, porque no sucede durante la ejecución.
