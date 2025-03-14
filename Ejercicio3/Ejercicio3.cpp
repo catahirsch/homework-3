@@ -119,40 +119,40 @@ void print_list(){
 }
 
 int main() {
-    cout << "Creando lista..." << endl;
+    cout << "Creando lista" << endl;
 
-    push_front(30);      // Lista: 30
-    push_front(20);      // Lista: 20 -> 30
-    push_front(10);      // Lista: 10 -> 20 -> 30
+    push_front(30);      
+    push_front(20);      
+    push_front(10);      
     print_list();
 
     cout << "\nAgregando al final:" << endl;
-    push_back(40);       // Lista: 10 -> 20 -> 30 -> 40
-    push_back(50);       // Lista: 10 -> 20 -> 30 -> 40 -> 50
+    push_back(40);       
+    push_back(50);       
     print_list();
 
     cout << "\nInsertando en posición 2 (entre 20 y 30):" << endl;
-    insert(2, 25);       // Lista: 10 -> 20 -> 25 -> 30 -> 40 -> 50
+    insert(2, 25);       
     print_list();
 
     cout << "\nInsertando en posición 0 (inicio):" << endl;
-    insert(0, 5);        // Lista: 5 -> 10 -> 20 -> 25 -> 30 -> 40 -> 50
+    insert(0, 5);        
     print_list();
 
     cout << "\nInsertando en posición 100 (muy grande, se agrega al final):" << endl;
-    insert(100, 60);     // Lista: 5 -> 10 -> 20 -> 25 -> 30 -> 40 -> 50 -> 60
+    insert(100, 60);     
     print_list();
 
     cout << "\nBorrando posición 3 (debería borrar el 25):" << endl;
-    erase(3);            // Lista: 5 -> 10 -> 20 -> 30 -> 40 -> 50 -> 60
+    erase(3);            
     print_list();
 
     cout << "\nBorrando primera posición:" << endl;
-    erase(0);            // Lista: 10 -> 20 -> 30 -> 40 -> 50 -> 60
+    erase(0);            
     print_list();
 
     cout << "\nBorrando posición 100 (muy grande, borra el último):" << endl;
-    erase(100);          // Lista: 10 -> 20 -> 30 -> 40 -> 50
+    erase(100);          
     print_list();
 
     cout << "\nLista final:" << endl;
