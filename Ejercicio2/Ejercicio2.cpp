@@ -96,7 +96,7 @@ int main(){
     int opcion;
     string mensaje;
     while (true){
-        cout << "Seleccione el número de la opción necesaria:\n 1. DEBUG\n 2. INFO\n 3. WARNING\n 4. ERROR\n 5. CRITICAL\n 6. SECURITY\n 7. ERROR EN ARCHIVO\n 0. EXIT\n";
+        cout << "Seleccione el número de la opción necesaria:\n 1. DEBUG\n 2. INFO\n 3. WARNING\n 4. ERROR\n 5. CRITICAL\n 6. SECURITY\n 7. ERROR EN ARCHIVO\n 8. PERSONALIZADO\n 0. EXIT\n";
         cin >> opcion;
         cin.ignore();
 
@@ -122,6 +122,11 @@ int main(){
             cin.ignore();
 
             logMessage(mensaje, archivo, linea);
+        }else if(opcion == 8){
+            string evento;
+            cout << "Ingrese el evento: ";
+            getline(cin, evento);
+            writeMessage(mensaje, evento);
         }else{
             cout << "Eliga una opción de la lista" << endl;
         }
