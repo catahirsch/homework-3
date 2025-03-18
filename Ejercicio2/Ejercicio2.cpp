@@ -1,18 +1,9 @@
-// 2. En muchos sistemas, es importante registrar todo lo que sucede mientras están en
-// funcionamiento. Para ello, se utiliza un sistema de log que almacena los eventos
-// relevantes. Cada evento recibe una etiqueta que indica su nivel de importancia o
-// gravedad. Las etiquetas más comunes son: DEBUG, INFO, WARNING, ERROR y
-// CRITICAL.
+/* EJERCICIO 2 */
 
-// a. En este ejercicio, se pide crear un sistema log que permite agregar entradas a un
-// archivo mediante el llamado a una función logMessage definida en pseudo código de
-// la siguiente manera:
-
-// void logMessage(String mensaje, Integer/Otro NivelSeveridad)
-// Donde NivelSeveridad corresponderá con unas de las leyendas previamente
-// mencionadas. El formato esperado en una línea del archivo de log es el siguiente
-// [ERROR] <Mensaje>
-// [INFO] <Mensaje>
+/* Para este ejercicio, decidí utilizar function overloading para poder pasarle a la misma función, diferentes argumentos, y que cumpla
+lo necesario para cada punto pedido. Para los niveles de severidad definidos anteriormente, utilice un enum que luego convierto a string.
+Para los errores en archivo, la función recibe el nombre del archivo y el número de línea a registrar. Y, para los mensajes de seguridad,
+la función recibe dos strings. De esta manera, diferencio los mensajes de seguridad (dos strings) y los mensajes ya definidos (enum)*/
 
 #include <iostream>
 #include <fstream>
@@ -20,12 +11,12 @@
 using namespace std;
 
 enum NivelesSeveridad{
-    DEBUG, INFO, WARNING, ERROR, CRITICAL
+    DEBUG, INFO, WARNING, ERROR, CRITICAL // Inicializo un enum con los posibles niveles de severidad para después utilizar function overloading
 };
 
-const string file_name = "log_file.txt";
+const string file_name = "log_file.txt"; // Declaro el nombre del archivo a utilizar
 
-string NivelesToString(NivelesSeveridad nivelseveridad) {
+string NivelesToString(NivelesSeveridad nivelseveridad) { // Convierto a string para el mensaje
     switch (nivelseveridad) {
         case DEBUG: return "DEBUG";
         case INFO: return "INFO";
@@ -36,9 +27,8 @@ string NivelesToString(NivelesSeveridad nivelseveridad) {
     }
 }
 
-
 void writeMessage(const string& mensaje, const string& nivelseveridad){
-    ofstream logfile(file_name, ios::app);
+    ofstream logfile(file_name, ios::app); // Abro el archivo para editar si existe o crear y editar si no existe
     if (logfile.is_open()){
         logfile << "[" << nivelseveridad << "] " << mensaje << endl;
         logfile.close();
@@ -47,42 +37,22 @@ void writeMessage(const string& mensaje, const string& nivelseveridad){
     }
 }
 
-void logMessage(string mensaje, NivelesSeveridad nivelseveridad){
-    return writeMessage(mensaje, NivelesToString(nivelseveridad));
+void logMessage(const string& mensaje, NivelesSeveridad nivelseveridad){
+    writeMessage(mensaje, NivelesToString(nivelseveridad));
 }
 
-
-// Verifique su funcionamiento con al menos una entrada de cada tipo.
-
-// b. En un proyecto usualmente se solicitan cambios para mejorar o agregar funcionalidad.
-// Para el caso del código del ejercicio 2.a, se requiere tener la habilidad de agregar
-// mensajes personalizados para registrar otro tipo de eventos. Los requisitos son los
-// siguientes:
-// i. Todos los nuevos mensajes deben ser invocados con logMessage.
-// ii. Se requiere la posibilidad de registrar errores, indicando el mensaje de error, el
-// archivo y la línea de código donde sucedió este error, es decir:
-// logMessage(String Mensage_de_Error, String Archivo, Int Línea_de_Código)
-// iii. Se requiere la posibilidad de registrar un mensaje de “Acceso de Usuario” a la
-// aplicación. Este mensaje debe tener una leyenda nueva: [SECURITY]. La misma
-// debe ser ingresada de la siguiente manera:
-// logMessage(String Mensaje_De_Acceso, String Nombre_de_Usuario)
-// Los mensajes de acceso pueden ser: Access Granted, Access Denied, etc.
-// iv. Se requiere un código que pruebe que el sistema verifica la funcionalidad
-// requerida y que además demuestre que puede capturar un error en runtime,
-// crear una entrada en el log y después detener la ejecución del programa y salir
-// del mismo con un código de error (return 1)
-
-void logMessage(string mensaje, string archivo, int linea_de_codigo){
+void logMessage(const string& mensaje, const string& archivo, int linea_de_codigo){
     string mensaje_completo = mensaje + " en archivo "+ archivo +" en linea " + to_string(linea_de_codigo);
-    return writeMessage(mensaje_completo, "ERROR");
+    writeMessage(mensaje_completo, "ERROR"); // Si es un error escribo el mensaje y paso un nivel de severidad
 }
 
-void logMessage(string Mensaje_De_Acceso, string Nombre_de_Usuario){
+void logMessage(const string& Mensaje_De_Acceso, const string& Nombre_de_Usuario){
     string mensaje_completo = "Usuario " + Nombre_de_Usuario + ": " + Mensaje_De_Acceso;
-    return writeMessage(mensaje_completo, "SECURITY");
+    writeMessage(mensaje_completo, "SECURITY"); // Si es security armo el mensaje y paso otro nivel de severidad
 }
 
 int main(){
+    // Prueba con una entrada de cada tipo
     logMessage("Debugging", DEBUG);
     logMessage("Información", INFO);
     logMessage("Aviso", WARNING);
@@ -93,26 +63,27 @@ int main(){
  
     logMessage("Error 2", "hola.cpp", 15);
 
+    // Funcionamiento por pedido al usuario
     int opcion;
     string mensaje;
     while (true){
         cout << "Seleccione el número de la opción necesaria:\n 1. DEBUG\n 2. INFO\n 3. WARNING\n 4. ERROR\n 5. CRITICAL\n 6. SECURITY\n 7. ERROR EN ARCHIVO\n 8. PERSONALIZADO\n 0. EXIT\n";
         cin >> opcion;
-        cin.ignore();
+        cin.ignore(); // Ignora el carácter de salto de linea
 
-        if (opcion == 0)break;
+        if (opcion == 0)break; // Exit
 
         cout << "Ingrese el mensaje: ";
-        getline(cin, mensaje);
+        getline(cin, mensaje); // Permite la entrada del usuario de varias líneas
 
-        if(opcion >= 1 && opcion < 6){
+        if(opcion >= 1 && opcion < 6){ // Si es parte de los niveles de severidad
             logMessage(mensaje, static_cast<NivelesSeveridad>(opcion-1));
-        }else if(opcion == 6){
+        }else if(opcion == 6){ // Si es seguridad
             string nombre;
             cout << "Ingrese el nombre de usuario: ";
             getline(cin, nombre);
             logMessage(mensaje, nombre);
-        }else if(opcion == 7){
+        }else if(opcion == 7){ // Si es un error
             string archivo; int linea;
             cout << "Ingrese el nombre del archivo: ";
             getline(cin, archivo);
@@ -122,12 +93,12 @@ int main(){
             cin.ignore();
 
             logMessage(mensaje, archivo, linea);
-        }else if(opcion == 8){
+        }else if(opcion == 8){ // Si es personalizado
             string evento;
             cout << "Ingrese el evento: ";
             getline(cin, evento);
             writeMessage(mensaje, evento);
-        }else{
+        }else{ // Si la opción elegida no es valida
             cout << "Eliga una opción de la lista" << endl;
         }
     }

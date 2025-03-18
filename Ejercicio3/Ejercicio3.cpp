@@ -1,84 +1,83 @@
-// 3. Implemente una lista enlazada que utilice nodos que simplemente contengan un
-// valor y una dirección de memoria de un nodo. Adicionalmente, agregue las siguientes
-// funciones para manejar la lista:
+/* EJERCICIO 3 */
 
-// Presentar ejemplos que verifiquen el funcionamiento requerido en las funciones i-vi y,
-// muy importante para el ejercicio, sólo utilizar smart pointers. 
+/* En mi implementación de una lsita simplemente enlazada, utilizo shared_ptr para aprovechar el manejo de memoria automático.
+Evitando tener que borrar la memoria */
+
 #include <iostream>
 #include <memory>
 
 using namespace std;
 
-struct node {
+struct node { // Inicializo la estructura de nodo con un valor y puntero a siguiente
     int data;
     shared_ptr<node> next;
 };
 
 // i. create_node(): devuelve un nodo.
 shared_ptr<node> create_node(int data) {
-    auto new_node = make_shared<node>();
-    new_node->data = data;
-    new_node->next = nullptr;
+    auto new_node = make_shared<node>(); // Creo un nuevo nodo
+    new_node->data = data; // Inicializo el dato
+    new_node->next = nullptr; // Inicializo puntero a NULL
     return new_node;
 }
 
 // ii. push_front(): inserta un nodo al frente de la lista.
 void push_front(shared_ptr<node>& head, int data) {
-    auto new_node = create_node(data);
+    auto new_node = create_node(data); // Creo un nodo nuevo
     new_node->next = head; // Si no hay head apunta a Null
-    head = new_node;
+    head = new_node; // Asigno head como el nuevo nodo
 }
 
 // iii. push_back(): inserta un nodo al final de la lista.
 void push_back(shared_ptr<node>& head, int data) {
-    auto new_node = create_node(data);
-    if (!head) {
+    auto new_node = create_node(data); 
+    if (!head) { // Si no hay head, el nuevo nodo es el head
         head = new_node;
         return;
     }
     auto curr = head;
     while (curr->next) {
-        curr = curr->next;
+        curr = curr->next; // Recorro la lista hasta llegar a puntero a NULL
     }
-    curr->next = new_node;
+    curr->next = new_node; // Asigno último puntero al nuevo nodo
 }
 
 // iv. insert(): inserta un nodo en la posición dada. Si la posición es mayor, lo agrega al final.
 void insert(shared_ptr<node>& head, int pos, int data) {
-    if (pos <= 0) {
+    if (pos <= 0) { // Si la posición es menor o igual a 0, inserto nodo al principio de la lista
         push_front(head, data);
         return;
     }
 
     int i = 0;
     auto curr = head;
-    while (curr && i < pos - 1) {
+    while (curr && i < pos - 1) { // Recorro hasta puntero a null o hasta la posición dada
         curr = curr->next;
         i++;
     }
 
-    if (!curr) {
+    if (!curr) { // Si la posición es más grande que el largo, inserto el nodo al final de la lista
         cout << "La posición dada es mayor al largo de la lista, agregando al final" << endl;
         push_back(head, data);
         return;
     }
 
-    auto new_node = create_node(data);
-    new_node->next = curr->next;
-    curr->next = new_node;
+    auto new_node = create_node(data); // Si la posición no es mayor, creo el nodo
+    new_node->next = curr->next; // Asigno el puntero a next del nuevo nodo al puntero next del nodo anterior
+    curr->next = new_node; // Asigno el puntero a next del nodo anterior al nuevo nodo
 }
 
 // v. erase(): borra un nodo en la posición dada. Si la posición es mayor, borra el último nodo.
 void erase(shared_ptr<node>& head, int pos) {
-    if (!head) return;
+    if (!head) return; // Si la lista esta vacía, termina la función
 
-    if (pos <= 0) {
-        head = head->next;
+    if (pos <= 0) { // Si la posición refiere al head, elimino el head
+        head = head->next; // Como es un shared ptr, cuando ya no haya referencias apuntando hacia el ptr, se elimina automáticamente 
         return;
     }
 
     auto curr = head;
-    shared_ptr<node> prev = nullptr;
+    shared_ptr<node> prev = nullptr; // Recorro guardando el nodo anterior
     int i = 0;
 
     while (curr->next && i < pos) {
@@ -87,7 +86,7 @@ void erase(shared_ptr<node>& head, int pos) {
         i++;
     }
 
-    if (!curr->next) {
+    if (!curr->next) { // Si la posición es mayor al largo de la lista, borro el último nodo
         if (prev) {
             prev->next = nullptr;
         } else {
@@ -96,14 +95,14 @@ void erase(shared_ptr<node>& head, int pos) {
         return;
     }
 
-    prev->next = curr->next;
+    prev->next = curr->next; // Elimina al nodo deseado, modificando los punteros ("saltea al nodo")
 }
 
 // vi. print_list(): imprime la lista.
 void print_list(const shared_ptr<node>& head) {
     auto curr = head;
-    while (curr) {
-        cout << curr->data;
+    while (curr) { // Recorre la lista
+        cout << curr->data; // Imprime cada valor
         if (curr->next) {
             cout << " -> ";
         }
