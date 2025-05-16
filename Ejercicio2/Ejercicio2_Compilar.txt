@@ -1,4 +1,0 @@
-*Como ejecutar*
-
-g++ Ejercicio2.cpp -o log
-./log

@@ -1,4 +1,0 @@
-*Como ejecutar*
-
-g++ -std=c++11 Ejercicio4.cpp -o Ejercicio4  
-./Ejercicio4

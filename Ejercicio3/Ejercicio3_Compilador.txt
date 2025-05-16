@@ -1,4 +1,0 @@
-*Como ejecutar*
-
-g++ Ejercicio3.cpp -o list
-./list

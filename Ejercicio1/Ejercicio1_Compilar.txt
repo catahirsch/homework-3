@@ -1,4 +1,0 @@
-*Como ejecutar*
-
-g++ Ejercicio1.cpp -o matriz
-./matriz
