@@ -1,0 +1,4 @@
+/* Como compilar */
+
+g++ -std=c++20 -o ej1 Ejercicio1.cpp
+./ej1

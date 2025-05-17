@@ -1,0 +1,4 @@
+/*Como compilar*/
+
+g++ -std=c++20 -o ej2 Ejercicio2.cpp
+./ej2  
