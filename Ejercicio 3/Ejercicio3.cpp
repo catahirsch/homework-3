@@ -22,9 +22,9 @@ concept isPair = std::is_same_v<T, std::pair<int, int>>;
 
 class Clase1{
     protected:
-        palabras palabras;
-        listas listas;
-        vec_doubles vec_doubles;
+        palabras palabras_;
+        listas listas_;
+        vec_doubles vec_doubles_;
 
     public:
         Clase1(){};
@@ -32,26 +32,26 @@ class Clase1{
         template<typename T> // Plantilla para agregar valores a los vectores
         void agregarValor(const T& valor){
             if constexpr (isDouble<T>){ // Si el tipo es double
-                vec_doubles.push_back(valor); // Agrego el valor al vector de doubles
+                vec_doubles_.push_back(valor); // Agrego el valor al vector de doubles
             }
             else if constexpr(isString<T>){ // Si el tipo es string
-                palabras.push_back(valor); // Agrego el valor al vector de palabras
+                palabras_.push_back(valor); // Agrego el valor al vector de palabras
             }
             else if constexpr(isPair<T>){ // Si el tipo es un par de ints
-                listas.push_back(valor); // Agrego el valor al vector de listas
+                listas_.push_back(valor); // Agrego el valor al vector de listas (directo porque ya es un par de ints)
             }
         }  
 
         ::palabras getPalabras() const { // Método para obtener el vector de palabras
-            return palabras;
+            return palabras_;
         }
 
         ::listas getListas() const { // Método para obtener el vector de listas
-            return listas;
+            return listas_;
         }
 
         ::vec_doubles getVecDoubles() const { // Método para obtener el vector de doubles
-            return vec_doubles;
+            return vec_doubles_;
         }
 
         ~Clase1(){}
@@ -63,9 +63,9 @@ class Clase2 : public Clase1{ // Clase derivada de Clase1
 
         void printVecDouble(std::ostream& os){ // Método para imprimir el vector de doubles generalizado para cout o ofstream
             os << "{ "<< "\"vec_doubles\": [";
-            for(size_t i = 0; i < vec_doubles.size(); ++i){
-                os << vec_doubles[i];
-                if (i != vec_doubles.size() - 1) {
+            for(size_t i = 0; i < vec_doubles_.size(); ++i){
+                os << vec_doubles_[i];
+                if (i != vec_doubles_.size() - 1) {
                     os << ", ";
                 }
             }
@@ -74,9 +74,9 @@ class Clase2 : public Clase1{ // Clase derivada de Clase1
 
         void printPalabras(std::ostream& os){ // Método para imprimir el vector de palabras generalizado para cout o ofstream
             os << "  \"palabras\": [";
-            for (size_t i = 0; i < palabras.size(); ++i) {
-                os << "\"" << palabras[i] << "\"";
-                if (i != palabras.size() - 1) {
+            for (size_t i = 0; i < palabras_.size(); ++i) {
+                os << "\"" << palabras_[i] << "\"";
+                if (i != palabras_.size() - 1) {
                     os << ", ";
                 }
             }
@@ -85,9 +85,9 @@ class Clase2 : public Clase1{ // Clase derivada de Clase1
 
         void printListas(std::ostream& os){ // Método para imprimir el vector de listas generalizado para cout o ofstream
             os << "  \"listas\": [\n";
-            for (size_t i = 0; i < listas.size(); ++i) {
-                os << "\t[" << listas[i].first << ", " << listas[i].second << "]";
-                if (i != listas.size() - 1) {
+            for (size_t i = 0; i < listas_.size(); ++i) {
+                os << "\t[" << listas_[i].first << ", " << listas_[i].second << "]";
+                if (i != listas_.size() - 1) {
                     os << ", \n";
                 }
             }
