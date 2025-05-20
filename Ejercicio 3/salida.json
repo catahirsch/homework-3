@@ -1,7 +1,0 @@
-{ "vec_doubles": [1.3, 2.1, 3.2],
-  "palabras": ["Hola", "Mundo"],
-  "listas": [
-	[1, 2], 
-	[3, 4]
-	]
-}
